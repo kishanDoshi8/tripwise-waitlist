@@ -25,13 +25,6 @@ export default function Navbar() {
                             </a>
                         </FadeContent>
                     </li>
-                    <li>
-                        <FadeContent>
-                            <Link to='/survey'>
-                                <Button color="success" variant="ghost">Start Survey</Button>
-                            </Link>
-                        </FadeContent>
-                    </li>
                 </ul>
             </div>
         </nav>

@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import AnimatedContent from "./animations/animateContent";
-import BlurText from "./animations/blur-text";
 import BorderGradient from "./animations/border-gradient";
 import { Button } from "./ui/button";
+import Typewriter from "./animations/typewriter";
 
 export default function LandingPage() {
     return (
@@ -26,10 +26,9 @@ export default function LandingPage() {
                 </BorderGradient>
             </AnimatedContent>
 
-            <BlurText
+            <Typewriter
+                component={"h2"}
                 text="Planning group trips is painful — we're here to make it easier."
-                delay={150}
-                animateBy="words"
                 className="text-3xl text-center lg:text-left lg:text-6xl font-semibold"
             />
 
@@ -53,17 +52,21 @@ export default function LandingPage() {
                 direction="vertical"
                 delay={500}
             >
-                <Link to='/survey'>
-                    <Button
-                        color="success"
-                        size="lg"
-                        variant="shadow"
-                        className={`group`}
-                        endContent={<span className={`text-2xl -translate-y-0.5 group-hover:translate-x-2 transition-all duration-200`}>&rarr;</span>}
-                    >
-                        Take Survey & Join waitlist
-                    </Button>
-                </Link>
+                <Button
+                    component={Link}
+                    to="/survey"
+                    color="success"
+                    size="lg"
+                    variant="shadow"
+                    className="group"
+                    endContent={
+                        <span className="text-2xl -translate-y-0.5 group-hover:translate-x-2 transition-all duration-200">
+                            &rarr;
+                        </span>
+                    }
+                >
+                    Take Survey & Join waitlist
+                </Button>
             </AnimatedContent>
         </div>
     )
