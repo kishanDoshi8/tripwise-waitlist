@@ -16,6 +16,7 @@ export default function TripWaitlist({ value, onChange}: Readonly<Props>) {
             color="success"
             variant="bordered"
             className={`max-w-md pl-2`}
+            autoFocus
         />
     )
 }

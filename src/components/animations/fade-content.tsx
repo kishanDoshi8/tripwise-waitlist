@@ -1,4 +1,6 @@
-import { useRef, useEffect, useState, ReactNode } from "react";
+import { useRef } from "react";
+import { useInView } from "framer-motion";
+import type { ReactNode } from "react";
 
 interface FadeContentProps {
     children: ReactNode;
@@ -21,38 +23,17 @@ const FadeContent: React.FC<FadeContentProps> = ({
     initialOpacity = 0,
     className = "",
 }) => {
-    const [inView, setInView] = useState(false);
     const ref = useRef<HTMLDivElement | null>(null);
-
-    useEffect(() => {
-        const element = ref.current;
-        if (!element) return;
-
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    observer.unobserve(element);
-                    setTimeout(() => {
-                        setInView(true);
-                    }, delay);
-                }
-            },
-            { threshold }
-        );
-
-        observer.observe(element);
-
-        return () => observer.disconnect();
-    }, [threshold, delay]);
+    const isInView = useInView(ref, { once: true, amount: threshold });
 
     return (
         <div
             ref={ref}
             className={className}
             style={{
-                opacity: inView ? 1 : initialOpacity,
-                transition: `opacity ${duration}ms ${easing}, filter ${duration}ms ${easing}`,
-                filter: blur ? (inView ? "blur(0px)" : "blur(10px)") : "none",
+                opacity: isInView ? 1 : initialOpacity,
+                transition: `opacity ${duration}ms ${easing} ${delay}ms, filter ${duration}ms ${easing} ${delay}ms`,
+                filter: blur ? (isInView ? "blur(0px)" : "blur(10px)") : "none",
             }}
         >
             {children}

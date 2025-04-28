@@ -34,6 +34,7 @@ export default function TripTypes({ value, onChange, otherValue, onOtherChange }
                     value={otherValue}
                     onValueChange={onOtherChange}
                     placeholder='Tell us more!'
+                    autoFocus
                 />
             )}
         </div>

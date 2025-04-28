@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { cn } from "@/libs/utils";
+import FadeContent from "../animations/fade-content";
 
 interface StepperProps extends HTMLAttributes<HTMLDivElement> {
     children: ReactNode;
@@ -23,6 +24,7 @@ interface StepperProps extends HTMLAttributes<HTMLDivElement> {
     backButtonText?: string;
     nextButtonText?: string;
     disableStepIndicators?: boolean;
+    hideStepIndicators?: boolean;
     renderStepIndicator?: (props: RenderStepIndicatorProps) => ReactNode;
 }
 
@@ -46,6 +48,7 @@ export default function Stepper({
     backButtonText = "Back",
     nextButtonText = "Next",
     disableStepIndicators = false,
+    hideStepIndicators = false,
     renderStepIndicator,
     ...rest
 }: Readonly<StepperProps>) {
@@ -61,12 +64,12 @@ export default function Stepper({
         if (newStep > totalSteps) {
             onFinalStepCompleted();
         } else {
-            onStepChange(currentStep);
+            onStepChange(newStep);
         }
     };
 
     const handleBack = () => {
-        if (currentStep > 1) {
+        if (currentStep > 2) {
             setDirection(-1);
             updateStep(currentStep - 1);
         }
@@ -90,7 +93,7 @@ export default function Stepper({
                 className={`step-circle-container ${stepCircleContainerClassName}`}
                 style={{ border: "1px solid #222" }}
             >
-                <div className={`step-indicator-row ${stepContainerClassName}`}>
+                {!hideStepIndicators && <div className={`step-indicator-row ${stepContainerClassName}`}>
                     {stepsArray.map((_, index) => {
                         const stepNumber = index + 1;
                         const isNotLastStep = index < totalSteps - 1;
@@ -122,7 +125,7 @@ export default function Stepper({
                             </React.Fragment>
                         );
                     })}
-                </div>
+                </div>}
 
                 <StepContentWrapper
                     isCompleted={isCompleted}
@@ -135,8 +138,8 @@ export default function Stepper({
 
                 {!isCompleted && (
                     <div className={`footer-container ${footerClassName}`}>
-                        <div className={`footer-nav ${currentStep !== 1 ? "spread" : "end"}`}>
-                            {currentStep !== 1 && (
+                        <div className={`footer-nav ${currentStep > 2 ? "spread" : "end"}`}>
+                            {currentStep > 2 && (
                                 <button
                                     onClick={handleBack}
                                     className={`back-button ${currentStep === 1 ? "inactive" : ""}`}
@@ -203,12 +206,36 @@ interface SlideTransitionProps {
 
 function SlideTransition({ children, direction, onHeightReady }: Readonly<SlideTransitionProps>) {
     const containerRef = useRef<HTMLDivElement | null>(null);
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     useLayoutEffect(() => {
-        if (containerRef.current) {
-            onHeightReady(containerRef.current.offsetHeight);
-        }
-    }, [children, onHeightReady]);
+        if (!containerRef.current) return;
+
+        const observer = new ResizeObserver(entries => {
+            for (let entry of entries) {
+                if (entry.target === containerRef.current) {
+                    const newHeight = entry.contentRect.height;
+
+                    // Debounce the height update
+                    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+                    timeoutRef.current = setTimeout(() => {
+                        onHeightReady(newHeight);
+                    }, 200);
+                }
+            }
+        });
+
+        observer.observe(containerRef.current);
+
+        // Initial measure
+        onHeightReady(containerRef.current.offsetHeight);
+
+        return () => {
+            observer.disconnect();
+            if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        };
+    }, [onHeightReady]);
 
     return (
         <motion.div
@@ -352,7 +379,11 @@ interface DescriptionProps {
 }
 
 export function StepDescription({ className, children }: Readonly<DescriptionProps>) {
-    return <p className={cn(`text-3xl mb-4 opacity-80`, className)}>{children}</p>
+    return (
+        <FadeContent delay={1000}>
+            <p className={cn(`text-3xl mb-4 opacity-80`, className)}>{children}</p>
+        </FadeContent>
+    )
 }
 
 interface ContentProps {
@@ -361,7 +392,10 @@ interface ContentProps {
 }
 
 export function StepContent({ className, children }: Readonly<ContentProps>) {
-    return <div className={cn(`mb-4 space-y-2`, className)}>
-        {children}
-    </div>
+    return (
+        <FadeContent delay={1500} className={cn(`mb-4 space-y-2`, className)}>
+                {children}
+        </FadeContent>
+    )
+    
 }

@@ -38,7 +38,7 @@
     display: flex;
     width: 100%;
     align-items: center;
-    padding: 2rem;
+    padding: 2rem 2rem 0 2rem;
 }
 
 .step-content-default {
@@ -47,8 +47,7 @@
 }
 
 .step-default {
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding: 2rem 2rem 0 2rem;
 }
 
 .footer-container {

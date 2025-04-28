@@ -15,13 +15,15 @@ export default function Survey() {
         tripProblems: '',
         tripOrganize: [] as string[],
         tripOrganizeOther: '',
-        tripFeatures: [] as string[],
+        tripFeatures: '',
         tripPlans: '',
         email: '',
     });
 
-    const handleStepChange = () => {
-        console.log(formData);
+    const [hideStepper, setHideStepper] = useState(true);
+
+    const handleStepChange = (step: number) => {
+        setHideStepper(() => step === 1);
     }
 
     const updateFormData = (key: keyof typeof formData, value: any) => {
@@ -47,7 +49,15 @@ export default function Survey() {
 
     return (
         <div>
-            <Stepper onStepChange={handleStepChange}>
+            <Stepper onStepChange={handleStepChange} disableStepIndicators={true} hideStepIndicators={hideStepper}>
+                <Step>
+                    <Typewriter component={StepHeader} text="Join our waitlist." />
+                    <StepDescription>Get notified when its ready and enjoy the perks.</StepDescription>
+                    <TripWaitlist
+                        value={formData.email}
+                        onChange={value => updateFormData('email', value)}
+                    />
+                </Step>
                 <Step>
                     <Typewriter component={StepHeader} text="Lets start simple." />
                     <StepDescription>What kind of group trips do you usually plan?</StepDescription>
@@ -108,14 +118,6 @@ export default function Survey() {
                             onChange={value => updateFormData('tripPlans', value)}
                         />
                     </StepContent>
-                </Step>
-                <Step>
-                    <Typewriter component={StepHeader} text="Join our waitlist." />
-                    <StepDescription>Get notified when its ready and enjoy the perks.</StepDescription>
-                    <TripWaitlist
-                        value={formData.email}
-                        onChange={value => updateFormData('email', value)}
-                    />
                 </Step>
             </Stepper>
         </div>
