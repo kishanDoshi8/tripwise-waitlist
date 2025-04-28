@@ -3,6 +3,7 @@ import AnimatedContent from "./animations/animateContent";
 import BorderGradient from "./animations/border-gradient";
 import { Button } from "./ui/button";
 import Typewriter from "./animations/typewriter";
+import { Chip } from "@heroui/react";
 
 export default function LandingPage() {
     return (
@@ -13,16 +14,15 @@ export default function LandingPage() {
                 distance={25}
             >
                 <BorderGradient>
-                    <a href="https://beta.tripwise.group/" target="_blank">
-                        <Button
-                            color="success"
-                            variant="flat"
-                            size="sm"
-                            radius="full"
-                        >
-                            Invite only beta login
-                        </Button>
-                    </a>
+                    <Chip
+                        color="success"
+                        variant="flat"
+                        size="sm"
+                        radius="full"
+                        className={`cursor-default px-2`}
+                    >
+                        Invite only beta login
+                    </Chip>
                 </BorderGradient>
             </AnimatedContent>
 
@@ -65,7 +65,7 @@ export default function LandingPage() {
                         </span>
                     }
                 >
-                    Take Survey & Join waitlist
+                    Tripwise Waitlist – Join the Crew!
                 </Button>
             </AnimatedContent>
         </div>

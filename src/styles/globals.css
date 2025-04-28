@@ -19,7 +19,7 @@
     }
 
     .card-content {
-        @apply relative w-full h-full rounded-2xl bg-gradient-to-b from-slate-800 to-slate-900;
+        @apply relative w-full h-full rounded-2xl bg-slate-900;
     }
 }
 

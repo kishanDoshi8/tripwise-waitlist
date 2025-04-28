@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import BlurText from "./animations/blur-text";
 import FadeContent from "./animations/fade-content";
+import { Tooltip } from "@heroui/react";
 
 
 export default function Navbar() {
@@ -21,7 +22,15 @@ export default function Navbar() {
                     <li>
                         <FadeContent>
                             <a href="https://beta.tripwise.group/" target="_blank">
-                                <Button color="success" variant="light">Beta Login</Button>
+                                <Tooltip content="Invite only" color="success" radius="sm" delay={700} placement="left">
+                                    <Button
+                                        color="success" 
+                                        variant="light"
+                                        startContent={<span className={`material-icons text-sm`}>lock</span>}
+                                    >
+                                        Beta Login
+                                    </Button>
+                                </Tooltip>
                             </a>
                         </FadeContent>
                     </li>
