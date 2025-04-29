@@ -1,13 +1,18 @@
 import { Chip, Textarea } from '@heroui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Suggestions from '../ui/suggestions';
 
 interface Props {
     value: string;
     onChange: (value: string) => void;
+    setIsCurrentStepValid: (value: boolean) => void;
 }
 
-export default function TripFeatures({ value, onChange }: Readonly<Props>) {
+export default function TripFeatures({ value, onChange, setIsCurrentStepValid }: Readonly<Props>) {
+    useEffect(() => {
+        setIsCurrentStepValid(Boolean(value.trim()));
+    }, [value]);
+
     const solutions = [
         '📋 One place to share all plans & itineraries',
         '💸 Easy expense splitting (no more IOUs!)',
@@ -45,13 +50,13 @@ export default function TripFeatures({ value, onChange }: Readonly<Props>) {
             />
             <div className={`flex flex-wrap gap-4`}>
                 {suggestions.map(suggestion => (
-                    <button key={suggestion} onClick={() => handleSuggestion(suggestion)}>
+                    <button key={suggestion} onClick={() => handleSuggestion(suggestion)} type='button'>
                         <Suggestions>{suggestion}</Suggestions>
                     </button>
                 ))}
             </div>
             {hasMore && (
-                <button onClick={handleMore}>
+                <button onClick={handleMore} type='button'>
                     <Chip variant="flat">...</Chip>
                 </button>
             )}

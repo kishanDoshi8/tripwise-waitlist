@@ -19,6 +19,7 @@ export default function Survey() {
         tripPlans: '',
         email: '',
     });
+    const [isCurrentStepValid, setIsCurrentStepValid] = useState(false);
 
     const [hideStepper, setHideStepper] = useState(true);
 
@@ -47,78 +48,126 @@ export default function Survey() {
         }))
     }
 
+    const steps = [
+        {
+            key: 'email',
+            title: 'Join our waitlist.',
+            question: 'Get notified when its ready and enjoy the perks.',
+            content: (
+                <TripWaitlist
+                    value={formData.email}
+                    onChange={value => updateFormData('email', value)}
+                    setIsCurrentStepValid={setIsCurrentStepValid}
+                />
+            ),
+        },
+        {
+            key: 'trip_types',
+            title: 'Lets start simple.',
+            question: 'What kind of group trips do you usually plan?',
+            content: (
+                <TripTypes
+                    value={formData.tripTypes}
+                    onChange={value => updateFormData('tripTypes', value)}
+                    otherValue={formData.tripTypesOther}
+                    onOtherChange={handleTripTypesOtherChange}
+                    setIsCurrentStepValid={setIsCurrentStepValid}
+                />
+            ),
+        },
+        {
+            key: 'planning_pain_points',
+            title: 'Group Travel = Group Chaos.',
+            question: `What's the most annoying part of planning a group trip?`,
+            content: (
+                <TripProblem
+                    value={formData.tripProblems}
+                    onChange={value => updateFormData('tripProblems', value)}
+                    setIsCurrentStepValid={setIsCurrentStepValid}
+                />
+            ),
+        },
+        {
+            key: 'current_organization_method',
+            title: 'Be honest.',
+            question: `How are you currently organizing your group trips?`,
+            content: (
+                <TripOrganize
+                    value={formData.tripOrganize}
+                    onChange={value => updateFormData('tripOrganize', value)}
+                    otherValue={formData.tripOrganizeOther}
+                    onOtherChange={handleTripOrganizeOtherChange}
+                    setIsCurrentStepValid={setIsCurrentStepValid}
+                />
+            ),
+        },
+        {
+            key: 'desired_solution',
+            title: 'Real Talk.',
+            question: `If Tripwise could solve just one thing for you, what would it be?`,
+            content: (
+                <TripFeatures
+                    value={formData.tripFeatures}
+                    onChange={value => updateFormData('tripFeatures', value)}
+                    setIsCurrentStepValid={setIsCurrentStepValid}
+                />
+            ),
+        },
+        {
+            key: 'willingness_to_pay',
+            title: 'Okay last one – this helps us plan ahead.',
+            question: `If Tripwise could solve just one thing for you, what would it be?`,
+            content: (
+                <TripPlans
+                    value={formData.tripPlans}
+                    onChange={value => updateFormData('tripPlans', value)}
+                    setIsCurrentStepValid={setIsCurrentStepValid}
+                />
+            ),
+        },
+    ];
+
+    const handleNext = () => {
+        const form = document.getElementById('step-form') as HTMLFormElement;
+        if (form) {
+            const isValid = form.checkValidity();
+            setIsCurrentStepValid(false);
+            return isValid;
+        }
+
+        return false;
+    }
+
+    const handleSubmit = () => {
+        return false;
+    }
+
+    const handleStart = () => {
+        return true;
+    }
+
     return (
         <div>
-            <Stepper onStepChange={handleStepChange} disableStepIndicators={true} hideStepIndicators={hideStepper}>
-                <Step>
-                    <Typewriter component={StepHeader} text="Join our waitlist." />
-                    <StepDescription>Get notified when its ready and enjoy the perks.</StepDescription>
-                    <TripWaitlist
-                        value={formData.email}
-                        onChange={value => updateFormData('email', value)}
-                    />
-                </Step>
-                <Step>
-                    <Typewriter component={StepHeader} text="Lets start simple." />
-                    <StepDescription>What kind of group trips do you usually plan?</StepDescription>
-                    <StepContent>
-                        <TripTypes 
-                            value={formData.tripTypes}
-                            onChange={value => updateFormData('tripTypes', value)}
-                            otherValue={formData.tripTypesOther}
-                            onOtherChange={handleTripTypesOtherChange}
-                        />
-                    </StepContent>
-                </Step>
-                <Step>
-                    <Typewriter component={StepHeader} text="Group Travel = Group Chaos." />
-                    <StepDescription>
-                        What's the most annoying part of planning a group trip?
-                    </StepDescription>
-                    <StepContent>
-                        <p className="opacity-65">(Vent it out - we're listening)</p>
-                        <TripProblem
-                            value={formData.tripProblems}
-                            onChange={value => updateFormData('tripProblems', value)}
-                        />
-                    </StepContent>
-                </Step>
-                <Step>
-                    <Typewriter component={StepHeader} text="Be honest." />
-                    <StepDescription>
-                        How are you currently organizing your group trips?
-                    </StepDescription>
-                    <StepContent>
-                        <p className={`opacity-65`}>(No shame — we’ve all done the "shared Google Sheet or that 99-message group chat" thing.)</p>
-                        <TripOrganize
-                            value={formData.tripOrganize}
-                            onChange={value => updateFormData('tripOrganize', value)}
-                            otherValue={formData.tripOrganizeOther}
-                            onOtherChange={handleTripOrganizeOtherChange}
-                        />
-                    </StepContent>
-                </Step>
-                <Step>
-                    <Typewriter component={StepHeader} text="Real Talk." />
-                    <StepDescription>If Tripwise could solve just one thing for you, what would it be?</StepDescription>
-                    <StepContent>
-                        <TripFeatures
-                            value={formData.tripFeatures}
-                            onChange={value => updateFormData('tripFeatures', value)}
-                        />
-                    </StepContent>
-                </Step>
-                <Step>
-                    <Typewriter component={StepHeader} text="Okay last one – this helps us plan ahead." />
-                    <StepDescription>Would you be open to paying for a tool that saves time, avoids group chaos, and makes planning actually fun?</StepDescription>
-                    <StepContent>
-                        <p className={`opacity-65`}>(Be real — no pressure.)</p>
-                        <TripPlans
-                            value={formData.tripPlans}
-                            onChange={value => updateFormData('tripPlans', value)}
-                        />
-                    </StepContent>
-                </Step>
+            <Stepper
+                onStepChange={handleStepChange}
+                disableStepIndicators={true}
+                hideStepIndicators={hideStepper}
+                nextButtonProps={{
+                    isDisabled: !isCurrentStepValid,
+                }}
+                onNext={handleNext}
+                onSubmit={handleSubmit}
+                onStart={handleStart}
+            >
+                {steps.map(step => (
+                    <form key={step.key} id="step-form">
+                        <Step>
+                            <Typewriter component={StepHeader} text={step.title} />
+                            <StepDescription>{step.question}</StepDescription>
+                            <StepContent>{step.content}</StepContent>
+                        </Step>
+                    </form>
+                ))}
             </Stepper>
         </div>
     )

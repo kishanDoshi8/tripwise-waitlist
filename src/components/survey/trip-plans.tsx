@@ -1,19 +1,28 @@
 import { Radio, RadioGroup } from '@heroui/react';
+import { useEffect } from 'react';
 
 interface Props {
     value: string;
     onChange: (value: string) => void;
+    setIsCurrentStepValid: (value: boolean) => void;
 }
 
-export default function TripPlans({ value, onChange }: Readonly<Props>) {
+export default function TripPlans({ value, onChange, setIsCurrentStepValid }: Readonly<Props>) {
+    useEffect(() => {
+        setIsCurrentStepValid(Boolean(value));
+    }, [value]);
+    
     return (
-        <RadioGroup color="success" value={value} onValueChange={onChange}>
-            <Radio value={'$1-3/m'}>$1–$3/month (I’d give it a try)</Radio>
-            <Radio value={'$4-7/m'}>$4–$7/month (I’d split this with my crew)</Radio>
-            <Radio value={'$8-12/m'}> $8–$12/month (worth it for a smooth trip)</Radio>
-            <Radio value={'depends'}>Depends on the features (I’m flexible)</Radio>
-            <Radio value={'One-time'}>One-time payment would be better for me</Radio>
-            <Radio value={'0'}>Nope — I only pay with good vibes</Radio>
-        </RadioGroup>
+        <div className={`space-y-2`}>
+            <p className={`opacity-65`}>(Be real — no pressure.)</p>
+            <RadioGroup color="success" value={value} onValueChange={onChange}>
+                <Radio value={'$1-3/m'}>$1–$3/month (I’d give it a try)</Radio>
+                <Radio value={'$4-7/m'}>$4–$7/month (I’d split this with my crew)</Radio>
+                <Radio value={'$8-12/m'}> $8–$12/month (worth it for a smooth trip)</Radio>
+                <Radio value={'depends'}>Depends on the features (I’m flexible)</Radio>
+                <Radio value={'One-time'}>One-time payment would be better for me</Radio>
+                <Radio value={'0'}>Nope — I only pay with good vibes</Radio>
+            </RadioGroup>
+        </div>
     )
 }

@@ -9,6 +9,7 @@ import React, {
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { cn } from "@/libs/utils";
 import FadeContent from "../animations/fade-content";
+import { Button, ButtonProps } from "@heroui/react";
 
 interface StepperProps extends HTMLAttributes<HTMLDivElement> {
     children: ReactNode;
@@ -20,11 +21,14 @@ interface StepperProps extends HTMLAttributes<HTMLDivElement> {
     contentClassName?: string;
     footerClassName?: string;
     backButtonProps?: React.ButtonHTMLAttributes<HTMLButtonElement>;
-    nextButtonProps?: React.ButtonHTMLAttributes<HTMLButtonElement>;
+    nextButtonProps?: ButtonProps;
     backButtonText?: string;
     nextButtonText?: string;
     disableStepIndicators?: boolean;
     hideStepIndicators?: boolean;
+    onStart?: () => boolean;
+    onNext?: () => boolean;
+    onSubmit?: () => boolean;
     renderStepIndicator?: (props: RenderStepIndicatorProps) => ReactNode;
 }
 
@@ -49,6 +53,9 @@ export default function Stepper({
     nextButtonText = "Next",
     disableStepIndicators = false,
     hideStepIndicators = false,
+    onStart = () => true,
+    onNext = () => true,
+    onSubmit = () => true,
     renderStepIndicator,
     ...rest
 }: Readonly<StepperProps>) {
@@ -56,6 +63,7 @@ export default function Stepper({
     const [direction, setDirection] = useState<number>(0);
     const stepsArray = Children.toArray(children);
     const totalSteps = stepsArray.length;
+    const isFirstStep = currentStep === initialStep;
     const isCompleted = currentStep > totalSteps;
     const isLastStep = currentStep === totalSteps;
 
@@ -76,15 +84,21 @@ export default function Stepper({
     };
 
     const handleNext = () => {
-        if (!isLastStep) {
-            setDirection(1);
+        if (isLastStep) return;
+
+        setDirection(1);
+
+        const shouldAdvance = isFirstStep ? onStart() : onNext();
+        if (shouldAdvance) {
             updateStep(currentStep + 1);
         }
     };
 
     const handleComplete = () => {
         setDirection(1);
-        updateStep(totalSteps + 1);
+        if (onSubmit()) {
+            updateStep(totalSteps + 1);
+        }
     };
 
     return (
@@ -148,13 +162,15 @@ export default function Stepper({
                                     {backButtonText}
                                 </button>
                             )}
-                            <button
-                                onClick={isLastStep ? handleComplete : handleNext}
-                                className="next-button"
+                            <Button
+                                color="success"
+                                radius="full"
+                                className={`next-button`}
                                 {...nextButtonProps}
+                                onPress={isLastStep ? handleComplete : handleNext}
                             >
-                                {isLastStep ? "Complete" : nextButtonText}
-                            </button>
+                                {isLastStep ? "Submit" : nextButtonText}
+                            </Button>
                         </div>
                     </div>
                 )}

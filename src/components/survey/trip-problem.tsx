@@ -1,13 +1,14 @@
 import { Chip, Textarea } from "@heroui/react";
 import Suggestions from "../ui/suggestions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Props {
     value: string;
     onChange: (value: string) => void;
+    setIsCurrentStepValid: (value: boolean) => void;
 }
 
-export default function TripProblem({ value, onChange }: Readonly<Props>) {
+export default function TripProblem({ value, onChange, setIsCurrentStepValid }: Readonly<Props>) {
     const problems = [
         '🤳🏼 People not responding',
         '📅 Finding a date everyone agrees on',
@@ -26,6 +27,10 @@ export default function TripProblem({ value, onChange }: Readonly<Props>) {
     const [suggestions, setSuggestions] = useState(problems.slice(0, INITIAL_COUNT));
     const hasMore = suggestions.length < problems.length;
 
+    useEffect(() => {
+        setIsCurrentStepValid(Boolean(value.trim()));
+    }, [value]);
+
     const handleMore = () => {
         setSuggestions(prev => {
             const nextItems = problems.slice(prev.length, prev.length + BATCH_SIZE);
@@ -39,16 +44,16 @@ export default function TripProblem({ value, onChange }: Readonly<Props>) {
 
     return (
         <>
-            <Textarea color="success" variant="bordered" value={value} onValueChange={onChange} autoFocus/>
+            <Textarea color="success" variant="bordered" value={value} onValueChange={onChange} placeholder="Vent it out – we're listening" autoFocus/>
             <div className={`flex flex-wrap gap-4`}>
                 {suggestions.map(suggestion => (
-                    <button key={suggestion} onClick={() => handleSuggestion(suggestion)}>
+                    <button key={suggestion} onClick={() => handleSuggestion(suggestion)} type="button">
                         <Suggestions>{suggestion}</Suggestions>
                     </button>
                 ))}
             </div>
             {hasMore && (
-                <button onClick={handleMore}>
+                <button onClick={handleMore} type="button">
                     <Chip variant="flat">...</Chip>
                 </button>
             )}
