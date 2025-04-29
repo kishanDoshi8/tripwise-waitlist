@@ -7,7 +7,6 @@ interface Props {
     component?: React.ElementType;
     delay?: number;
     className?: string;
-    onAnimationComplete?: () => void;
 }
 
 const LETTER_DELAY = 0.025;
@@ -18,65 +17,62 @@ export default function Typewriter({
     component = 'span',
     delay = LETTER_DELAY,
     className = '',
-    onAnimationComplete
 }: Readonly<Props>) {
     const Component = component;
     const [started, setStarted] = useState(false);
-    const [elements, setElements] = useState([] as string[]);
+    const [elements, setElements] = useState<string[][]>([]);
 
     useEffect(() => {
         setStarted(false);
-        setElements([...text.split('')]);
-        const timeout = setTimeout(() => {
-            setStarted(true);
-        }, 500);
+        const wordsWithSpaces = text.split(/(\s+)/); // keeps spaces as separate elements
+        const charArrays = wordsWithSpaces.map(word => [...word]);
+        setElements(charArrays);
+        const timeout = setTimeout(() => setStarted(true), 500);
         return () => clearTimeout(timeout);
     }, [text]);
 
-    useEffect(() => {
-        if (!started) return;
-
-        const totalDuration = elements.length * (delay * 1000) + 500;
-
-        const timeout = setTimeout(() => {
-            onAnimationComplete?.();
-        }, totalDuration);
-
-        return () => clearTimeout(timeout);
-    }, [started, elements, delay, onAnimationComplete]);
+    // Track running index for delay
+    let globalCharIndex = 0;
 
     return (
         <span className="relative inline">
-            {/* Reserve Space */}
-            <Component className={cn("opacity-0", className)}>{text}</Component>
+            <Component className={cn("opacity-0 pointer-events-none", className)}>
+                <span className={`inline-block md:mr-3 mr-2`}>{text.split(' ')}</span>
+            </Component>
+            <Component className={cn("absolute inset-0 pointer-events-none", className)}>
+                {elements.map((word, wordIndex) => (
+                    <span key={`word-${wordIndex}`} className={`inline-block ${wordIndex < elements.length - 1 && 'md:mr-3 mr-2'}`}>
+                        {word.map((char) => {
+                            const delayIndex = globalCharIndex;
+                            globalCharIndex++;
 
-            {/* Typing Animation */}
-            <Component className={cn("absolute inset-0", className)}>
-                {elements.map((l, i) => (
-                    <motion.span
-                        key={`${l}-${i}`}
-                        className="relative"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: started ? 1 : 0 }}
-                        transition={{
-                            delay: started ? i * delay : 0,
-                            duration: 0.2,
-                        }}
-                    >
-                        {l}
-
-                        <motion.span
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: started ? [0, 1, 0] : 0 }}
-                            transition={{
-                                delay: started ? i * delay : 0,
-                                times: [0, 0.1, 1],
-                                duration: BOX_FADE_DURATION,
-                                ease: easeInOut,
-                            }}
-                            className="absolute bottom-[3px] left-[1px] right-0 top-[3px] bg-neutral-950"
-                        />
-                    </motion.span>
+                            return (
+                                <motion.span
+                                    key={`char-${delayIndex}`}
+                                    className="relative"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: started ? 1 : 0 }}
+                                    transition={{
+                                        delay: started ? delayIndex * delay : 0,
+                                        duration: 0.2,
+                                    }}
+                                >
+                                    {char}
+                                    <motion.span
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: started ? [0, 1, 0] : 0 }}
+                                        transition={{
+                                            delay: started ? delayIndex * delay : 0,
+                                            times: [0, 0.1, 1],
+                                            duration: BOX_FADE_DURATION,
+                                            ease: easeInOut,
+                                        }}
+                                        className="absolute bottom-[3px] left-[1px] right-0 top-[3px] bg-neutral-950"
+                                    />
+                                </motion.span>
+                            );
+                        })}
+                    </span>
                 ))}
             </Component>
         </span>

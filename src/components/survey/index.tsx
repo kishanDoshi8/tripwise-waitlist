@@ -130,9 +130,7 @@ export default function Survey() {
     const handleNext = () => {
         const form = document.getElementById('step-form') as HTMLFormElement;
         if (form) {
-            const isValid = form.checkValidity();
-            setIsCurrentStepValid(false);
-            return isValid;
+            return form.checkValidity();
         }
 
         return false;
