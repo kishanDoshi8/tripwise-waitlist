@@ -26,9 +26,9 @@ interface StepperProps extends HTMLAttributes<HTMLDivElement> {
     nextButtonText?: string;
     disableStepIndicators?: boolean;
     hideStepIndicators?: boolean;
-    onStart?: () => boolean;
+    onStart?: () => Promise<boolean>;
     onNext?: () => boolean;
-    onSubmit?: () => boolean;
+    onSubmit?: () => Promise<boolean>;
     renderStepIndicator?: (props: RenderStepIndicatorProps) => ReactNode;
 }
 
@@ -53,9 +53,9 @@ export default function Stepper({
     nextButtonText = "Next",
     disableStepIndicators = false,
     hideStepIndicators = false,
-    onStart = () => true,
+    onStart = () => Promise.resolve(true),
     onNext = () => true,
-    onSubmit = () => true,
+    onSubmit = () => Promise.resolve(true),
     renderStepIndicator,
     ...rest
 }: Readonly<StepperProps>) {
@@ -83,20 +83,20 @@ export default function Stepper({
         }
     };
 
-    const handleNext = () => {
+    const handleNext = async () => {
         if (isLastStep) return;
 
         setDirection(1);
 
-        const shouldAdvance = isFirstStep ? onStart() : onNext();
+        const shouldAdvance = isFirstStep ? await onStart() : onNext();
         if (shouldAdvance) {
             updateStep(currentStep + 1);
         }
     };
 
-    const handleComplete = () => {
+    const handleComplete = async () => {
         setDirection(1);
-        if (onSubmit()) {
+        if (await onSubmit()) {
             updateStep(totalSteps + 1);
         }
     };

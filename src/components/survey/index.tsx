@@ -7,8 +7,12 @@ import TripProblem from "./trip-problem";
 import { useState } from "react";
 import TripWaitlist from "./trip-waitlist";
 import Typewriter from "../animations/typewriter";
+import { createSurvey, ResponseNames, Responses, updateSurvey } from "@/libs/api";
+import { useSurvey } from "@/context/SurveyContext";
+import { addToast } from "@heroui/react";
 
 export default function Survey() {
+    const { setSurveyData, data: userData } = useSurvey();
     const [formData, setFormData] = useState({
         tripTypes: [] as string[],
         tripTypesOther: '',
@@ -20,6 +24,7 @@ export default function Survey() {
         email: '',
     });
     const [isCurrentStepValid, setIsCurrentStepValid] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const [hideStepper, setHideStepper] = useState(true);
 
@@ -48,11 +53,19 @@ export default function Survey() {
         }))
     }
 
-    const steps = [
+    const steps: {
+        question: string;
+        title: string;
+        key: ResponseNames;
+        getAnswers: (data: typeof formData) => string | string[];
+        getOther?: (data: typeof formData) => string | undefined;
+        content: JSX.Element;
+    }[] = [
         {
             key: 'email',
             title: 'Join our waitlist.',
             question: 'Get notified when its ready and enjoy the perks.',
+            getAnswers: (data: typeof formData) => data.email,
             content: (
                 <TripWaitlist
                     value={formData.email}
@@ -65,6 +78,8 @@ export default function Survey() {
             key: 'trip_types',
             title: 'Lets start simple.',
             question: 'What kind of group trips do you usually plan?',
+            getAnswers: (data: typeof formData) => data.tripTypes,
+            getOther: (data: typeof formData) => data.tripTypesOther,
             content: (
                 <TripTypes
                     value={formData.tripTypes}
@@ -79,6 +94,7 @@ export default function Survey() {
             key: 'planning_pain_points',
             title: 'Group Travel = Group Chaos.',
             question: `What's the most annoying part of planning a group trip?`,
+            getAnswers: (data: typeof formData) => data.tripProblems,
             content: (
                 <TripProblem
                     value={formData.tripProblems}
@@ -91,6 +107,8 @@ export default function Survey() {
             key: 'current_organization_method',
             title: 'Be honest.',
             question: `How are you currently organizing your group trips?`,
+            getAnswers: (data: typeof formData) => data.tripOrganize,
+            getOther: (data: typeof formData) => data.tripOrganizeOther,
             content: (
                 <TripOrganize
                     value={formData.tripOrganize}
@@ -105,6 +123,7 @@ export default function Survey() {
             key: 'desired_solution',
             title: 'Real Talk.',
             question: `If Tripwise could solve just one thing for you, what would it be?`,
+            getAnswers: (data: typeof formData) => data.tripFeatures,
             content: (
                 <TripFeatures
                     value={formData.tripFeatures}
@@ -117,6 +136,7 @@ export default function Survey() {
             key: 'willingness_to_pay',
             title: 'Okay last one – this helps us plan ahead.',
             question: `If Tripwise could solve just one thing for you, what would it be?`,
+            getAnswers: (data: typeof formData) => data.tripPlans,
             content: (
                 <TripPlans
                     value={formData.tripPlans}
@@ -127,6 +147,38 @@ export default function Survey() {
         },
     ];
 
+    const extractResponses = (data: typeof formData): Responses => {
+        return steps.map(step => ({
+            question: step.question,
+            name: step.key,
+            answer: step.getAnswers(data),
+            otherText: step.getOther?.(data),
+        }));
+    }
+
+    const handleStart = async () => {
+        let success = false;
+        setIsLoading(true);
+        await createSurvey(formData.email)
+            .then(({ data }) => {
+                setSurveyData({ id: data._id, email: data.email });
+                success = true;
+            })
+            .catch(error => {
+                addToast({
+                    title: 'Unable to add you to the waitlist.',
+                    description: error.message,
+                    color: 'danger',
+                    variant: 'bordered',
+                });
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+
+        return success;
+    }
+
     const handleNext = () => {
         const form = document.getElementById('step-form') as HTMLFormElement;
         if (form) {
@@ -136,12 +188,29 @@ export default function Survey() {
         return false;
     }
 
-    const handleSubmit = () => {
-        return false;
-    }
+    const handleSubmit = async () => {
+        let success = false;
+        setIsLoading(true);
+        const responses = extractResponses(formData).filter(r => r.name !== 'email');
+        const id = userData?.id;
+        if (!id) return false;
+        await updateSurvey(responses, id)
+            .then(() => {
+                success = true;
+            })
+            .catch((error) => {
+                addToast({
+                    title: 'Unable to submit your survey.',
+                    description: error.message,
+                    color: 'danger',
+                    variant: 'bordered',
+                });
+            })
+            .finally(() => {
+                setIsLoading(false);
+            })
 
-    const handleStart = () => {
-        return true;
+        return success;
     }
 
     return (
@@ -152,6 +221,7 @@ export default function Survey() {
                 hideStepIndicators={hideStepper}
                 nextButtonProps={{
                     isDisabled: !isCurrentStepValid,
+                    isLoading,
                 }}
                 onNext={handleNext}
                 onSubmit={handleSubmit}
