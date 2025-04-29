@@ -23,6 +23,8 @@ export default function TripWaitlist({ value, onChange, setIsCurrentStepValid}: 
             variant="bordered"
             className={`max-w-md pl-2`}
             autoFocus
+            isClearable
+            aria-label="Enter email to join our waitlist"
         />
     )
 }

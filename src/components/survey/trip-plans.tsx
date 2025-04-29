@@ -15,7 +15,7 @@ export default function TripPlans({ value, onChange, setIsCurrentStepValid }: Re
     return (
         <div className={`space-y-2`}>
             <p className={`opacity-65`}>(Be real — no pressure.)</p>
-            <RadioGroup color="success" value={value} onValueChange={onChange}>
+            <RadioGroup color="success" value={value} onValueChange={onChange} aria-label='Choose willigness to pay'>
                 <Radio value={'$1-3/m'}>$1–$3/month (I’d give it a try)</Radio>
                 <Radio value={'$4-7/m'}>$4–$7/month (I’d split this with my crew)</Radio>
                 <Radio value={'$8-12/m'}> $8–$12/month (worth it for a smooth trip)</Radio>

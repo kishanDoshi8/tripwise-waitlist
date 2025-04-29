@@ -44,7 +44,16 @@ export default function TripProblem({ value, onChange, setIsCurrentStepValid }: 
 
     return (
         <>
-            <Textarea color="success" variant="bordered" value={value} onValueChange={onChange} placeholder="Vent it out – we're listening" autoFocus/>
+            <Textarea
+                color="success"
+                variant="bordered"
+                value={value}
+                onValueChange={onChange}
+                placeholder="Vent it out – we're listening"
+                aria-label="Enter desired solution"
+                isClearable
+                autoFocus
+            />
             <div className={`flex flex-wrap gap-4`}>
                 {suggestions.map(suggestion => (
                     <button key={suggestion} onClick={() => handleSuggestion(suggestion)} type="button">

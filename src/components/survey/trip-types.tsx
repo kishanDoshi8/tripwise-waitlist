@@ -25,7 +25,7 @@ export default function TripTypes({ value, onChange, otherValue, onOtherChange, 
 
     return (
         <div className={`space-y-4`}>
-            <CheckboxGroup color="success" value={value} onChange={handleChange} isRequired errorMessage={'test'}>
+            <CheckboxGroup color="success" value={value} onChange={handleChange} isRequired errorMessage={'test'} aria-label='Choose trip types'>
                 <Checkbox value={'Camping'}>Camping 🏕️</Checkbox>
                 <Checkbox value={'Road Trips'}>Road Trips 🚗</Checkbox>
                 <Checkbox value={'Beach Gateways'}>Beach Getaways 🏖️</Checkbox>
@@ -43,6 +43,8 @@ export default function TripTypes({ value, onChange, otherValue, onOtherChange, 
                     placeholder='Tell us more!'
                     autoFocus
                     isRequired
+                    isClearable
+                    aria-label='Enter other text'
                 />
             )}
         </div>

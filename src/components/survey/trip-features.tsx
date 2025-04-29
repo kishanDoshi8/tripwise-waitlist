@@ -47,6 +47,8 @@ export default function TripFeatures({ value, onChange, setIsCurrentStepValid }:
                 value={value}
                 onValueChange={onChange}
                 autoFocus
+                isClearable
+                aria-label='Enter desired solution'
             />
             <div className={`flex flex-wrap gap-4`}>
                 {suggestions.map(suggestion => (
