@@ -3,6 +3,7 @@ import { createContext, useContext, useMemo, useState } from 'react';
 interface SurveyData {
     id: string;
     email: string;
+    name?: string;
 }
 
 interface SurveyContextType {

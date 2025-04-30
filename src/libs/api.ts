@@ -14,8 +14,8 @@ export type Responses = {
     otherText: string | undefined;
 }[];
 
-export const createSurvey = async (email: string) => {
-    return await api.post<{ _id: string, email: string }>('/surveys', { email });
+export const createSurvey = async (email: string, name: string) => {
+    return await api.post<{ _id: string, email: string, name: string }>('/surveys', { email, name });
 }
 
 export const updateSurvey = async (responses: Responses, id: string) => {

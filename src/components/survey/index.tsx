@@ -22,6 +22,7 @@ export default function Survey() {
         tripFeatures: '',
         tripPlans: '',
         email: '',
+        name: '',
     });
     const [isCurrentStepValid, setIsCurrentStepValid] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -68,8 +69,10 @@ export default function Survey() {
             getAnswers: (data: typeof formData) => data.email,
             content: (
                 <TripWaitlist
-                    value={formData.email}
-                    onChange={value => updateFormData('email', value)}
+                    email={formData.email}
+                    onEmailChange={value => updateFormData('email', value)}
+                    name={formData.name}
+                    onNameChange={value => updateFormData('name', value)}
                     setIsCurrentStepValid={setIsCurrentStepValid}
                 />
             ),
@@ -159,9 +162,9 @@ export default function Survey() {
     const handleStart = async () => {
         let success = false;
         setIsLoading(true);
-        await createSurvey(formData.email)
+        await createSurvey(formData.email, formData.name)
             .then(({ data }) => {
-                setSurveyData({ id: data._id, email: data.email });
+                setSurveyData({ id: data._id, email: data.email, name: data.name });
                 success = true;
             })
             .catch(error => {
