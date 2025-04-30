@@ -1,18 +1,14 @@
 import Stepper, { Step, StepContent, StepDescription, StepHeader } from "../ui/stepper";
-import TripTypes from "./trip-types";
-import TripOrganize from "./trip-organize";
-import TripFeatures from "./trip-features";
-import TripPlans from "./trip-plans";
-import TripProblem from "./trip-problem";
 import { useState } from "react";
-import TripWaitlist from "./trip-waitlist";
 import Typewriter from "../animations/typewriter";
-import { createSurvey, ResponseNames, Responses, updateSurvey } from "@/libs/api";
+import { createSurvey, ResponseNames, Responses, updateSurvey } from "@/libs/survey/api";
 import { useSurvey } from "@/context/SurveyContext";
-import { addToast } from "@heroui/react";
+import { getSteps } from "./steps";
+import { useToast } from "@/hooks/useToast";
 
 export default function Survey() {
     const { setSurveyData, data: userData } = useSurvey();
+    const { errorToast } = useToast();
     const [formData, setFormData] = useState({
         tripTypes: [] as string[],
         tripTypesOther: '',
@@ -54,106 +50,12 @@ export default function Survey() {
         }))
     }
 
-    const steps: {
-        question: string;
-        title: string;
-        key: ResponseNames;
-        getAnswers: (data: typeof formData) => string | string[];
-        getOther?: (data: typeof formData) => string | undefined;
-        content: JSX.Element;
-    }[] = [
-        {
-            key: 'email',
-            title: 'Join our waitlist.',
-            question: 'Get notified when its ready and enjoy the perks.',
-            getAnswers: (data: typeof formData) => data.email,
-            content: (
-                <TripWaitlist
-                    email={formData.email}
-                    onEmailChange={value => updateFormData('email', value)}
-                    name={formData.name}
-                    onNameChange={value => updateFormData('name', value)}
-                    setIsCurrentStepValid={setIsCurrentStepValid}
-                />
-            ),
-        },
-        {
-            key: 'trip_types',
-            title: 'Lets start simple.',
-            question: 'What kind of group trips do you usually plan?',
-            getAnswers: (data: typeof formData) => data.tripTypes,
-            getOther: (data: typeof formData) => data.tripTypesOther,
-            content: (
-                <TripTypes
-                    value={formData.tripTypes}
-                    onChange={value => updateFormData('tripTypes', value)}
-                    otherValue={formData.tripTypesOther}
-                    onOtherChange={handleTripTypesOtherChange}
-                    setIsCurrentStepValid={setIsCurrentStepValid}
-                />
-            ),
-        },
-        {
-            key: 'planning_pain_points',
-            title: 'Group Travel = Group Chaos.',
-            question: `What's the most annoying part of planning a group trip?`,
-            getAnswers: (data: typeof formData) => data.tripProblems,
-            content: (
-                <TripProblem
-                    value={formData.tripProblems}
-                    onChange={value => updateFormData('tripProblems', value)}
-                    setIsCurrentStepValid={setIsCurrentStepValid}
-                />
-            ),
-        },
-        {
-            key: 'current_organization_method',
-            title: 'Be honest.',
-            question: `How are you currently organizing your group trips?`,
-            getAnswers: (data: typeof formData) => data.tripOrganize,
-            getOther: (data: typeof formData) => data.tripOrganizeOther,
-            content: (
-                <TripOrganize
-                    value={formData.tripOrganize}
-                    onChange={value => updateFormData('tripOrganize', value)}
-                    otherValue={formData.tripOrganizeOther}
-                    onOtherChange={handleTripOrganizeOtherChange}
-                    setIsCurrentStepValid={setIsCurrentStepValid}
-                />
-            ),
-        },
-        {
-            key: 'desired_solution',
-            title: 'Real Talk.',
-            question: `If Tripwise could solve just one thing for you, what would it be?`,
-            getAnswers: (data: typeof formData) => data.tripFeatures,
-            content: (
-                <TripFeatures
-                    value={formData.tripFeatures}
-                    onChange={value => updateFormData('tripFeatures', value)}
-                    setIsCurrentStepValid={setIsCurrentStepValid}
-                />
-            ),
-        },
-        {
-            key: 'willingness_to_pay',
-            title: 'Okay last one – this helps us plan ahead.',
-            question: `If Tripwise could solve just one thing for you, what would it be?`,
-            getAnswers: (data: typeof formData) => data.tripPlans,
-            content: (
-                <TripPlans
-                    value={formData.tripPlans}
-                    onChange={value => updateFormData('tripPlans', value)}
-                    setIsCurrentStepValid={setIsCurrentStepValid}
-                />
-            ),
-        },
-    ];
+    const steps = getSteps(formData, updateFormData, setIsCurrentStepValid, handleTripTypesOtherChange, handleTripOrganizeOtherChange);
 
     const extractResponses = (data: typeof formData): Responses => {
         return steps.map(step => ({
             question: step.question,
-            name: step.key,
+            name: step.key as ResponseNames,
             answer: step.getAnswers(data),
             otherText: step.getOther?.(data),
         }));
@@ -167,13 +69,8 @@ export default function Survey() {
                 setSurveyData({ id: data._id, email: data.email, name: data.name });
                 success = true;
             })
-            .catch(error => {
-                addToast({
-                    title: 'Unable to add you to the waitlist.',
-                    description: error.message,
-                    color: 'danger',
-                    variant: 'bordered',
-                });
+            .catch((error: Error) => {
+                errorToast('Unable to add you to the waitlist.', error.message);
             })
             .finally(() => {
                 setIsLoading(false);
@@ -202,12 +99,7 @@ export default function Survey() {
                 success = true;
             })
             .catch((error) => {
-                addToast({
-                    title: 'Unable to submit your survey.',
-                    description: error.message,
-                    color: 'danger',
-                    variant: 'bordered',
-                });
+                errorToast('Unable to submit your survey.', error.message);
             })
             .finally(() => {
                 setIsLoading(false);

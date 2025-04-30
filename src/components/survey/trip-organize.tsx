@@ -29,9 +29,9 @@ export default function TripOrganize({ value, onChange, otherValue, onOtherChang
             <CheckboxGroup color="success" value={value} onChange={handleChange} isRequired aria-label='Choose current organization method'>
                 <Checkbox value={'Group chat'}>📱 Group chat chaos (WhatsApp, Messenger, etc.)</Checkbox>
                 <Checkbox value={'Shared Docs'}>📝 Shared docs (Google Docs, Google Sheets)</Checkbox>
-                <Checkbox value={'Splitwise'}>💸 Cost tracking apps (Splitwise, Venmo requests, etc.)</Checkbox>
-                <Checkbox value={'Travel Apps'}>🏡 Booking apps (Airbnb, Hopper, Vrbo, etc.)</Checkbox>
-                <Checkbox value={'We cant'}>🎲 We just wing it — pure chaos</Checkbox>
+                <Checkbox value={'Cost tracking apps'}>💸 Cost tracking apps (Splitwise, Venmo requests, etc.)</Checkbox>
+                <Checkbox value={'Booking apps'}>🏡 Booking apps (Airbnb, Hopper, Vrbo, etc.)</Checkbox>
+                <Checkbox value={'We just wing it'}>🎲 We just wing it — pure chaos</Checkbox>
                 <Checkbox value={'Other'}>🔍 Other</Checkbox>
             </CheckboxGroup>
 
