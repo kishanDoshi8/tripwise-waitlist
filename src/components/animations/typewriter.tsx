@@ -37,11 +37,11 @@ export default function Typewriter({
     return (
         <span className="relative inline">
             <Component className={cn("opacity-0 pointer-events-none", className)}>
-                <span className={`inline-block md:mr-3 mr-2`}>{text.split(' ')}</span>
+                <span className={`inline-block mr-2`}>{text.split(' ')}</span>
             </Component>
             <Component className={cn("absolute inset-0 pointer-events-none", className)}>
                 {elements.map((word, wordIndex) => (
-                    <span key={`word-${wordIndex}`} className={`inline-block ${wordIndex < elements.length - 1 && 'md:mr-3 mr-2'}`}>
+                    <span key={`word-${wordIndex}`} className={`inline-block ${wordIndex < elements.length - 1 && 'mr-2'}`}>
                         {word.map((char) => {
                             const delayIndex = globalCharIndex;
                             globalCharIndex++;
