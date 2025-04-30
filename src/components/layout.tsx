@@ -39,7 +39,7 @@ export default function AppLayout() {
                                 }
                             }}
                         >
-                            <ListboxSection title={'TripWise ©'} classNames={{ heading: 'p-4', base: 'w-xl' }}>
+                            <ListboxSection title={'© TripWise'} classNames={{ heading: 'p-4', base: 'w-xl' }}>
                                 <ListboxItem key={'/policies'} className={`min-w-64 text-sm`} startContent={<span className={`material-icons text-sm`}>open_in_new</span>}>
                                     Terms & policies
                                 </ListboxItem>

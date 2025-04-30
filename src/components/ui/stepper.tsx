@@ -29,6 +29,7 @@ interface StepperProps extends HTMLAttributes<HTMLDivElement> {
     onStart?: () => Promise<boolean>;
     onNext?: () => boolean;
     onSubmit?: () => Promise<boolean>;
+    finalComponent?: ReactNode;
     renderStepIndicator?: (props: RenderStepIndicatorProps) => ReactNode;
 }
 
@@ -56,6 +57,7 @@ export default function Stepper({
     onStart = () => Promise.resolve(true),
     onNext = () => true,
     onSubmit = () => Promise.resolve(true),
+    finalComponent,
     renderStepIndicator,
     ...rest
 }: Readonly<StepperProps>) {
@@ -107,7 +109,7 @@ export default function Stepper({
                 className={`step-circle-container ${stepCircleContainerClassName}`}
                 style={{ border: "1px solid #222" }}
             >
-                {!hideStepIndicators && <div className={`step-indicator-row ${stepContainerClassName}`}>
+                {!hideStepIndicators && <div className={`step-indicator-row px-8 pt-8 ${currentStep === totalSteps + 1 && !finalComponent && 'pb-8'} ${stepContainerClassName}`}>
                     {stepsArray.map((_, index) => {
                         const stepNumber = index + 1;
                         const isNotLastStep = index < totalSteps - 1;
@@ -146,6 +148,7 @@ export default function Stepper({
                     currentStep={currentStep}
                     direction={direction}
                     className={`step-content-default ${contentClassName}`}
+                    finalComponent={finalComponent}
                 >
                     {stepsArray[currentStep - 1]}
                 </StepContentWrapper>
@@ -184,6 +187,7 @@ interface StepContentWrapperProps {
     currentStep: number;
     direction: number;
     children: ReactNode;
+    finalComponent?: ReactNode;
     className?: string;
 }
 
@@ -192,6 +196,7 @@ function StepContentWrapper({
     currentStep,
     direction,
     children,
+    finalComponent,
     className,
 }: Readonly<StepContentWrapperProps>) {
     const [parentHeight, setParentHeight] = useState<number>(0);
@@ -200,13 +205,18 @@ function StepContentWrapper({
         <motion.div
             className={className}
             style={{ position: "relative", overflow: "hidden" }}
-            animate={{ height: isCompleted ? 0 : parentHeight }}
+            animate={{ height: isCompleted && !finalComponent ? 0 : parentHeight }}
             transition={{ type: "spring", duration: 0.4 }}
         >
             <AnimatePresence initial={false} mode="sync" custom={direction}>
                 {!isCompleted && (
                     <SlideTransition key={currentStep} direction={direction} onHeightReady={(h) => setParentHeight(h)}>
                         {children}
+                    </SlideTransition>
+                )}
+                {isCompleted && finalComponent && (
+                    <SlideTransition key={currentStep} direction={direction} onHeightReady={(h) => setParentHeight(h)}>
+                        {finalComponent}
                     </SlideTransition>
                 )}
             </AnimatePresence>

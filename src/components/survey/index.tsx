@@ -5,6 +5,7 @@ import { createSurvey, ResponseNames, Responses, updateSurvey } from "@/libs/sur
 import { useSurvey } from "@/context/SurveyContext";
 import { getSteps } from "./steps";
 import { useToast } from "@/hooks/useToast";
+import FinalComponent from "./final";
 
 export default function Survey() {
     const { setSurveyData, data: userData } = useSurvey();
@@ -121,6 +122,7 @@ export default function Survey() {
                 onNext={handleNext}
                 onSubmit={handleSubmit}
                 onStart={handleStart}
+                finalComponent={<FinalComponent />}
             >
                 {steps.map(step => (
                     <form key={step.key} id="step-form">
