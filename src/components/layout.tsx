@@ -10,7 +10,7 @@ export default function AppLayout() {
                 <Navbar />
             </header>
 
-            <main className={`min-h-screen w-full bg-[radial-gradient(at_50%_95%,_theme('colors.emerald.900'),_theme('colors.slate.950'))] pt-28 pb-12 px-8 font-mono`}>
+            <main className={`min-h-screen w-full bg-[radial-gradient(at_50%_95%,_theme('colors.emerald.900'),_theme('colors.slate.950'))] pt-28 pb-12 md:px-8 px-4 font-mono`}>
                 <Outlet />
             </main>
 

@@ -109,7 +109,7 @@ export default function Stepper({
                 className={`step-circle-container ${stepCircleContainerClassName}`}
                 style={{ border: "1px solid #222" }}
             >
-                {!hideStepIndicators && <div className={`step-indicator-row px-8 pt-8 ${currentStep === totalSteps + 1 && !finalComponent && 'pb-8'} ${stepContainerClassName}`}>
+                {!hideStepIndicators && <div className={`step-indicator-row md:px-8 md:pt-8 px-4 pt-4 ${currentStep === totalSteps + 1 && !finalComponent && 'pb-8'} ${stepContainerClassName}`}>
                     {stepsArray.map((_, index) => {
                         const stepNumber = index + 1;
                         const isNotLastStep = index < totalSteps - 1;
@@ -299,7 +299,7 @@ interface StepProps {
 }
 
 export function Step({ children }: Readonly<StepProps>): JSX.Element {
-    return <div className="step-default">{children}</div>;
+    return <div className="md:px-8 md:pt-8 px-4 pt-4">{children}</div>;
 }
 
 interface StepIndicatorProps {
@@ -396,7 +396,7 @@ interface HeaderProps {
 }
 
 export function StepHeader({ className, children }: Readonly<HeaderProps>) {
-    return <h2 className={cn(`text-2xl mb-2 text-success-400`, className)}>{children}</h2>
+    return <h2 className={cn(`md:text-2xl text-lg mb-2 text-success-400`, className)}>{children}</h2>
 }
 
 interface DescriptionProps {
@@ -407,7 +407,7 @@ interface DescriptionProps {
 export function StepDescription({ className, children }: Readonly<DescriptionProps>) {
     return (
         <FadeContent delay={1000}>
-            <p className={cn(`text-3xl mb-4 opacity-80`, className)}>{children}</p>
+            <p className={cn(`md:text-3xl text-xl mb-4 opacity-80`, className)}>{children}</p>
         </FadeContent>
     )
 }
@@ -419,7 +419,7 @@ interface ContentProps {
 
 export function StepContent({ className, children }: Readonly<ContentProps>) {
     return (
-        <FadeContent delay={1500} className={cn(`mb-4 space-y-2`, className)}>
+        <FadeContent delay={1500} className={cn(`mb-4 space-y-2 md:text-base text-sm`, className)}>
                 {children}
         </FadeContent>
     )

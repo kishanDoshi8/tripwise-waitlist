@@ -26,7 +26,14 @@ export default function TripOrganize({ value, onChange, otherValue, onOtherChang
     return (
         <div className={`space-y-2`}>
             <p className={`opacity-65`}>(No shame — we’ve all done the "shared Google Sheet or that 99-message group chat" thing.)</p>
-            <CheckboxGroup color="success" value={value} onChange={handleChange} isRequired aria-label='Choose current organization method'>
+            <CheckboxGroup
+                color="success"
+                value={value}
+                onChange={handleChange}
+                isRequired
+                aria-label='Choose current organization method'
+                errorMessage={'Please select an option to proceed.'}
+            >
                 <Checkbox value={'Group chat'}>📱 Group chat chaos (WhatsApp, Messenger, etc.)</Checkbox>
                 <Checkbox value={'Shared Docs'}>📝 Shared docs (Google Docs, Google Sheets)</Checkbox>
                 <Checkbox value={'Cost tracking apps'}>💸 Cost tracking apps (Splitwise, Venmo requests, etc.)</Checkbox>

@@ -25,7 +25,14 @@ export default function TripTypes({ value, onChange, otherValue, onOtherChange, 
 
     return (
         <div className={`space-y-4`}>
-            <CheckboxGroup color="success" value={value} onChange={handleChange} isRequired errorMessage={'test'} aria-label='Choose trip types'>
+            <CheckboxGroup
+                color="success"
+                value={value}
+                onChange={handleChange}
+                isRequired
+                aria-label='Choose trip types'
+                errorMessage={'Please select an option to proceed.'}
+            >
                 <Checkbox value={'Camping'}>Camping 🏕️</Checkbox>
                 <Checkbox value={'Road Trips'}>Road Trips 🚗</Checkbox>
                 <Checkbox value={'Beach Gateways'}>Beach Getaways 🏖️</Checkbox>

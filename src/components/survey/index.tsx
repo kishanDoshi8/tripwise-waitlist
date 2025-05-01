@@ -62,9 +62,18 @@ export default function Survey() {
         }));
     }
 
+    const validateForm = () => {
+        const form = document.getElementById('step-form') as HTMLFormElement;
+        if (form) {
+            return form.checkValidity();
+        }
+    }
+
     const handleStart = async () => {
+        if (!validateForm()) return false;
         let success = false;
         setIsLoading(true);
+
         await createSurvey(formData.email, formData.name)
             .then(({ data }) => {
                 setSurveyData({ id: data._id, email: data.email, name: data.name });
@@ -90,6 +99,7 @@ export default function Survey() {
     }
 
     const handleSubmit = async () => {
+        if (!validateForm()) return false;
         let success = false;
         setIsLoading(true);
         const responses = extractResponses(formData).filter(r => r.name !== 'email');

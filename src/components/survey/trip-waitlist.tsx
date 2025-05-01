@@ -24,7 +24,7 @@ export default function TripWaitlist({ email, onEmailChange, name, onNameChange,
                 type="text"
                 color="success"
                 variant="bordered"
-                className={`max-w-md pl-2`}
+                className={`max-w-md`}
                 isClearable
                 autoFocus
                 aria-label="Enter your name (optional)"
@@ -37,7 +37,7 @@ export default function TripWaitlist({ email, onEmailChange, name, onNameChange,
                 type="email"
                 color="success"
                 variant="bordered"
-                className={`max-w-md pl-2`}
+                className={`max-w-md`}
                 isClearable
                 aria-label="Enter email to join our waitlist"
             />
