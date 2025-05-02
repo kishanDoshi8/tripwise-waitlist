@@ -13,7 +13,7 @@ export default function Suggestions({ children }: Readonly<Props>) {
             className={`text-opacity-75 hover:text-opacity-100 transition-all duration-300 md:text-base text-sm h-auto`}
             startContent={<span className={`material-icons text-sm text-success-500`}>add</span>}
         >
-            <span className={`text-wrap`}>
+            <span className={`text-wrap text-slate-400 hover:text-slate-300 transition-colors`}>
                 {children}
             </span>
         </Chip>
