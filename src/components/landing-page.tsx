@@ -7,7 +7,7 @@ import { Chip } from "@heroui/react";
 
 export default function LandingPage() {
     return (
-        <div className="h-full flex flex-col items-center max-w-5xl mx-auto space-y-12 text-center">
+        <div className="h-full flex flex-col items-center max-w-5xl mx-auto space-y-12 text-center p-4">
             <AnimatedContent
                 reverse={true}
                 delay={150}

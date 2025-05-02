@@ -108,6 +108,7 @@ export default function Survey() {
         await updateSurvey(responses, id)
             .then(() => {
                 success = true;
+                setHideStepper(true);
             })
             .catch((error) => {
                 errorToast('Unable to submit your survey.', error.message);

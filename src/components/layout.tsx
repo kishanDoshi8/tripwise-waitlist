@@ -23,7 +23,7 @@ export default function AppLayout() {
                 >
                     <PopoverTrigger>
                         <button>
-                            <span className={`material-icons text-neutral-500 hover:text-neutral-300 transition-all duration-200`}>privacy_tips</span>
+                            <span className={`material-icons text-neutral-500 hover:text-neutral-300 transition-all duration-200 w-1/2 h-min`}>privacy_tips</span>
                         </button>
                     </PopoverTrigger>
                     <PopoverContent>

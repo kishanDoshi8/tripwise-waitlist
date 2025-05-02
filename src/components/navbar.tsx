@@ -22,7 +22,7 @@ export default function Navbar() {
                     <li>
                         <FadeContent>
                             <a href="https://beta.tripwise.group/" target="_blank">
-                                <Tooltip content="Invite only" color="success" radius="sm" delay={700} placement="left">
+                                <Tooltip content="Invite only" color="success" radius="sm" delay={700} placement="left" offset={8}>
                                     <Button
                                         color="success" 
                                         variant="light"

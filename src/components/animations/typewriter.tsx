@@ -36,10 +36,18 @@ export default function Typewriter({
 
     return (
         <span className="relative inline">
-            <Component className={cn("opacity-0 pointer-events-none", className)}>
-                <span className={`inline-block mr-2`}>{text.split(' ')}</span>
+            <Component className={cn("opacity-0 pointer-events-none absolute inset-0", className)}>
+                {elements.map((word, wordIndex) => (
+                    <span key={`ghost-word-${wordIndex}`} className={`inline-block ${wordIndex < elements.length - 1 && 'mr-2'}`}>
+                        {word.map((char, charIndex) => (
+                            <span key={`ghost-char-${wordIndex}-${charIndex}`} className="inline-block relative">
+                                {char}
+                            </span>
+                        ))}
+                    </span>
+                ))}
             </Component>
-            <Component className={cn("absolute inset-0 pointer-events-none", className)}>
+            <Component className={cn("relative z-10", className)}>
                 {elements.map((word, wordIndex) => (
                     <span key={`word-${wordIndex}`} className={`inline-block ${wordIndex < elements.length - 1 && 'mr-2'}`}>
                         {word.map((char) => {
@@ -49,7 +57,7 @@ export default function Typewriter({
                             return (
                                 <motion.span
                                     key={`char-${delayIndex}`}
-                                    className="relative"
+                                    className="inline-block relative"
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: started ? 1 : 0 }}
                                     transition={{
