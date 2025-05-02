@@ -36,7 +36,7 @@ export default function LandingPage() {
                 distance={50}
                 direction="vertical"
             >
-                <p className={`text-lg md:text-xl`}>Hey! 👋 We're building Tripwise, the easiest way to plan epic group trips without the spreadsheet chaos, group chats gone wild, or “who’s bringing what again?” nightmares.</p>
+                <p className={`text-lg md:text-xl`}>Hey! 👋 We're building TripWise, the easiest way to plan epic group trips without the spreadsheet chaos, group chats gone wild, or “who’s bringing what again?” nightmares.</p>
             </AnimatedContent>
 
             <AnimatedContent
@@ -65,7 +65,7 @@ export default function LandingPage() {
                         </span>
                     }
                 >
-                    Tripwise Waitlist – Join the Crew!
+                    TripWise Waitlist – Join the Crew!
                 </Button>
             </AnimatedContent>
         </div>

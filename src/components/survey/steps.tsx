@@ -88,7 +88,7 @@ export function getSteps(
         {
             key: 'desired_solution',
             title: 'Real Talk.',
-            question: `If Tripwise could solve just one thing for you, what would it be?`,
+            question: `If TripWise could solve just one thing for you, what would it be?`,
             getAnswers: (data: typeof formData) => data.tripFeatures,
             content: (
                 <TripFeatures
