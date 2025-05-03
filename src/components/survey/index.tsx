@@ -56,9 +56,9 @@ export default function Survey() {
     const extractResponses = (data: typeof formData): Responses => {
         return steps.map(step => ({
             question: step.question,
-            name: step.key as ResponseNames,
-            answer: step.getAnswers(data),
-            otherText: step.getOther?.(data),
+            questionId: step.key as ResponseNames,
+            answerOptions: step.getAnswerOptions?.(data),
+            answerText: step.getAnswerText(data),
         }));
     }
 
@@ -76,7 +76,7 @@ export default function Survey() {
 
         await createSurvey(formData.email, formData.name)
             .then(({ data }) => {
-                setSurveyData({ id: data._id, email: data.email, name: data.name });
+                setSurveyData({ id: data.id, email: data.email, name: data.name });
                 success = true;
             })
             .catch((error: Error) => {
@@ -102,9 +102,13 @@ export default function Survey() {
         if (!validateForm()) return false;
         let success = false;
         setIsLoading(true);
-        const responses = extractResponses(formData).filter(r => r.name !== 'email');
+        const responses = extractResponses(formData).filter(r => r.questionId !== 'email');
         const id = userData?.id;
-        if (!id) return false;
+        if (!id) {
+            setIsLoading(false);
+            return false;
+        }
+
         await updateSurvey(responses, id)
             .then(() => {
                 success = true;

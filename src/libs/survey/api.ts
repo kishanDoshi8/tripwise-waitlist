@@ -9,19 +9,15 @@ export type ResponseNames = "email" | "trip_types" | "planning_pain_points" | "c
 
 export type Responses = {
     question: string;
-    name: ResponseNames;
-    answer: string | string[];
-    otherText: string | undefined;
+    questionId: ResponseNames;
+    answerText?: string;
+    answerOptions?: string[];
 }[];
 
 export const createSurvey = async (email: string, name: string) => {
-    return await api.post<{ _id: string, email: string, name: string }>('/surveys', { email, name });
+    return await api.post<{ id: string, email: string, name: string }>('/surveys', { email, name });
 }
 
-export const updateSurvey = async (responses: Responses, id: string) => {
-    return await api.put<{ _id: string, email: string }>('/surveys/' + id, { responses });
-}
-
-export const updateName = async (name: string, id: string) => {
-    return await api.put<{ _id: string, email: string, name: string }>('/surveys' + id, { name });
+export const updateSurvey = async (surveyResponses: Responses, id: string) => {
+    return await api.put<{ id: string, email: string }>('/surveys/' + id, { surveyResponses });
 }

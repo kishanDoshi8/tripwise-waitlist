@@ -29,7 +29,7 @@ export function getSteps(
             key: 'email',
             title: 'Join our waitlist.',
             question: 'Get notified when its ready and enjoy the perks.',
-            getAnswers: (data: typeof formData) => data.email,
+            getAnswerText: (data: typeof formData) => data.email,
             content: (
                 <TripWaitlist
                     email={formData.email}
@@ -44,8 +44,8 @@ export function getSteps(
             key: 'trip_types',
             title: 'Lets start simple.',
             question: 'What kind of group trips do you usually plan?',
-            getAnswers: (data: typeof formData) => data.tripTypes,
-            getOther: (data: typeof formData) => data.tripTypesOther,
+            getAnswerOptions: (data: typeof formData) => data.tripTypes,
+            getAnswerText: (data: typeof formData) => data.tripTypesOther,
             content: (
                 <TripTypes
                     value={formData.tripTypes}
@@ -60,7 +60,7 @@ export function getSteps(
             key: 'planning_pain_points',
             title: 'Group Travel = Group Chaos.',
             question: `What's the most annoying part of planning a group trip?`,
-            getAnswers: (data: typeof formData) => data.tripProblems,
+            getAnswerText: (data: typeof formData) => data.tripProblems,
             content: (
                 <TripProblem
                     value={formData.tripProblems}
@@ -73,8 +73,8 @@ export function getSteps(
             key: 'current_organization_method',
             title: 'Be honest.',
             question: `How are you currently organizing your group trips?`,
-            getAnswers: (data: typeof formData) => data.tripOrganize,
-            getOther: (data: typeof formData) => data.tripOrganizeOther,
+            getAnswerOptions: (data: typeof formData) => data.tripOrganize,
+            getAnswerText: (data: typeof formData) => data.tripOrganizeOther,
             content: (
                 <TripOrganize
                     value={formData.tripOrganize}
@@ -89,7 +89,7 @@ export function getSteps(
             key: 'desired_solution',
             title: 'Real Talk.',
             question: `If TripWise could solve just one thing for you, what would it be?`,
-            getAnswers: (data: typeof formData) => data.tripFeatures,
+            getAnswerText: (data: typeof formData) => data.tripFeatures,
             content: (
                 <TripFeatures
                     value={formData.tripFeatures}
@@ -102,7 +102,7 @@ export function getSteps(
             key: 'willingness_to_pay',
             title: 'Okay last one – this helps us plan ahead.',
             question: `Would you be open to paying for a tool that saves time, avoids group chaos, and makes planning actually fun?`,
-            getAnswers: (data: typeof formData) => data.tripPlans,
+            getAnswerText: (data: typeof formData) => data.tripPlans,
             content: (
                 <TripPlans
                     value={formData.tripPlans}
