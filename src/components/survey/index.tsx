@@ -6,6 +6,7 @@ import { useSurvey } from "@/context/SurveyContext";
 import { getSteps } from "./steps";
 import { useToast } from "@/hooks/useToast";
 import FinalComponent from "./final";
+import { getApiErrorMessage } from "@/utils/getErrorMessage";
 
 export default function Survey() {
     const { setSurveyData, data: userData } = useSurvey();
@@ -80,7 +81,7 @@ export default function Survey() {
                 success = true;
             })
             .catch((error: Error) => {
-                errorToast('Unable to add you to the waitlist.', error.message);
+                errorToast('Unable to add you to the waitlist.', getApiErrorMessage(error));
             })
             .finally(() => {
                 setIsLoading(false);
@@ -115,7 +116,7 @@ export default function Survey() {
                 setHideStepper(true);
             })
             .catch((error) => {
-                errorToast('Unable to submit your survey.', error.message);
+                errorToast('Unable to submit your survey.', getApiErrorMessage(error));
             })
             .finally(() => {
                 setIsLoading(false);
