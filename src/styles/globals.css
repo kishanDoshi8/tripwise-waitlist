@@ -4,17 +4,19 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+    font-family: monospace, sans-serif;
+}
+
 @layer utilities {
     .card-wrapper {
         @apply relative overflow-hidden rounded-2xl flex p-[1px];
     }
 
     .card-wrapper::before {
-        background: conic-gradient(
-            rgb(255, 255, 255) 0deg,
-            rgba(16, 237, 0, 0.511) 0deg,
-            transparent 180deg
-        );
+        background: conic-gradient(rgb(255, 255, 255) 0deg,
+                rgba(16, 237, 0, 0.511) 0deg,
+                transparent 180deg);
         @apply absolute left-[-25%] top-[-450%] h-[1000%] w-[150%] animate-border-spin content-[''];
     }
 
