@@ -35,7 +35,7 @@ export default function Privacy() {
 
                 <Section title="3. How We Protect Your Information">
                     <p>
-                        We store your data securely and take reasonable precautions to protect it.
+                        We store your data securely and take precautions to protect it.
                     </p>
                     <p>
                         However, no method of internet transmission is 100% secure, so we cannot guarantee absolute security.
@@ -49,7 +49,7 @@ export default function Privacy() {
                         <li>Delete your data at any time</li>
                     </ul>
                     <p className="mt-2">
-                        Please contact us at <Snippet color='success' variant='bordered'>support@tripwise.group</Snippet> if you would like to exercise any of these rights.
+                        Please contact us at <Snippet color='success' variant='bordered' className={`py-0`}>support@tripwise.group</Snippet> if you would like to exercise any of these rights.
                     </p>
                 </Section>
 
